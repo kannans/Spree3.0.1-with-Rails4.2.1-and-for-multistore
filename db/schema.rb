@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623092454) do
+ActiveRecord::Schema.define(version: 20150623100664) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -413,6 +413,14 @@ ActiveRecord::Schema.define(version: 20150623092454) do
   add_index "spree_products_promotion_rules", ["product_id"], name: "index_products_promotion_rules_on_product_id", using: :btree
   add_index "spree_products_promotion_rules", ["promotion_rule_id"], name: "index_products_promotion_rules_on_promotion_rule_id", using: :btree
 
+  create_table "spree_products_stores", id: false, force: :cascade do |t|
+    t.integer "product_id", limit: 4
+    t.integer "store_id",   limit: 4
+  end
+
+  add_index "spree_products_stores", ["product_id"], name: "index_spree_products_stores_on_product_id", using: :btree
+  add_index "spree_products_stores", ["store_id"], name: "index_spree_products_stores_on_store_id", using: :btree
+
   create_table "spree_products_taxons", force: :cascade do |t|
     t.integer "product_id", limit: 4
     t.integer "taxon_id",   limit: 4
@@ -464,6 +472,11 @@ ActiveRecord::Schema.define(version: 20150623092454) do
   add_index "spree_promotion_rules", ["product_group_id"], name: "index_promotion_rules_on_product_group_id", using: :btree
   add_index "spree_promotion_rules", ["promotion_id"], name: "index_spree_promotion_rules_on_promotion_id", using: :btree
   add_index "spree_promotion_rules", ["user_id"], name: "index_promotion_rules_on_user_id", using: :btree
+
+  create_table "spree_promotion_rules_stores", id: false, force: :cascade do |t|
+    t.integer "promotion_rule_id", limit: 4
+    t.integer "store_id",          limit: 4
+  end
 
   create_table "spree_promotion_rules_users", id: false, force: :cascade do |t|
     t.integer "user_id",           limit: 4
@@ -795,6 +808,23 @@ ActiveRecord::Schema.define(version: 20150623092454) do
   add_index "spree_stock_transfers", ["number"], name: "index_spree_stock_transfers_on_number", using: :btree
   add_index "spree_stock_transfers", ["source_location_id"], name: "index_spree_stock_transfers_on_source_location_id", using: :btree
 
+  create_table "spree_store_payment_methods", force: :cascade do |t|
+    t.integer  "store_id",          limit: 4
+    t.integer  "payment_method_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "spree_store_shipping_methods", force: :cascade do |t|
+    t.integer  "store_id",           limit: 4
+    t.integer  "shipping_method_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spree_store_shipping_methods", ["shipping_method_id"], name: "index_spree_store_shipping_methods_on_shipping_method_id", using: :btree
+  add_index "spree_store_shipping_methods", ["store_id"], name: "index_spree_store_shipping_methods_on_store_id", using: :btree
+
   create_table "spree_stores", force: :cascade do |t|
     t.string   "name",              limit: 255
     t.string   "url",               limit: 255
@@ -807,6 +837,7 @@ ActiveRecord::Schema.define(version: 20150623092454) do
     t.boolean  "default",           limit: 1,     default: false, null: false
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.string   "logo_file_name",    limit: 255
   end
 
   add_index "spree_stores", ["code"], name: "index_spree_stores_on_code", using: :btree
@@ -849,9 +880,11 @@ ActiveRecord::Schema.define(version: 20150623092454) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.integer  "position",   limit: 4,   default: 0
+    t.integer  "store_id",   limit: 4
   end
 
   add_index "spree_taxonomies", ["position"], name: "index_spree_taxonomies_on_position", using: :btree
+  add_index "spree_taxonomies", ["store_id"], name: "index_spree_taxonomies_on_store_id", using: :btree
 
   create_table "spree_taxons", force: :cascade do |t|
     t.integer  "parent_id",         limit: 4
@@ -900,6 +933,7 @@ ActiveRecord::Schema.define(version: 20150623092454) do
     t.boolean  "active",       limit: 1,   default: true
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.integer  "store_id",     limit: 4
   end
 
   add_index "spree_trackers", ["active"], name: "index_spree_trackers_on_active", using: :btree
