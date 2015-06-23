@@ -47,3 +47,5 @@ end
 gem 'spree', '3.0.1'
 gem 'spree_gateway', github: 'spree/spree_gateway', branch: '3-0-stable'
 gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
+# multi-store
+gem 'spree_multi_domain', git: 'git://github.com/spree/spree-multi-domain.git'
